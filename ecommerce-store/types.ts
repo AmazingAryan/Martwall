@@ -28,6 +28,7 @@ export interface Product {
   name: string;
   price: number;
   isFeatured: boolean;
+  model: string;
   images: Image[];
   description: string;
   variants: Variant[];

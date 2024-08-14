@@ -5,14 +5,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import {
-  Category,
-  Color,
-  Image,
-  Product,
-  Size,
-  Variant,
-} from "@prisma/client";
+import { Category, Color, Image, Product, Size, Variant } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -40,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import FileUpload from "@/components/ui/fileUpload";
 
 const variantSchema = z.object({
   sizeId: z.string().min(1).nullable(),
@@ -56,6 +50,7 @@ const formSchema = z.object({
   isArchived: z.boolean().default(false).optional(),
   description: z.string().min(1),
   variants: z.array(variantSchema),
+  model: z.string().min(1), // GLB file URL
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -83,15 +78,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData
-    ? "Edit product"
-    : "Create product";
-  const subTitle = initialData
-    ? "Edit product"
-    : "Add a new product";
-  const toastMessage = initialData
-    ? "Product updated."
-    : "Product created.";
+  const title = initialData ? "Edit product" : "Create product";
+  const subTitle = initialData ? "Edit product" : "Add a new product";
+  const toastMessage = initialData ? "Product updated." : "Product created.";
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<ProductFormValues>({
@@ -120,6 +109,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               inStock: 1,
             },
           ],
+          model: "", // Default value for model
         },
   });
 
@@ -134,10 +124,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           data
         );
       } else {
-        await axios.post(
-          `/api/${params.storeId}/products`,
-          data
-        );
+        await axios.post(`/api/${params.storeId}/products`, data);
       }
       router.refresh();
       router.push(`/${params.storeId}/products`);
@@ -152,9 +139,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.storeId}/products/${params.productId}`
-      );
+      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
       router.refresh();
       router.push(`/${params.storeId}/products`);
       toast.success("Product deleted.");
@@ -177,10 +162,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
       {/* Product delete */}
       <div className="flex items-center justify-between">
-        <Heading
-          title={title}
-          description={subTitle}
-        ></Heading>
+        <Heading title={title} description={subTitle}></Heading>
         {initialData && (
           <Button
             variant="destructive"
@@ -212,24 +194,36 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     <FormLabel>Images</FormLabel>
                     <FormControl>
                       <ImageUpload
-                        value={field.value.map(
-                          (image) => image.url
-                        )}
+                        value={field.value.map((image) => image.url)}
                         disabled={loading}
                         onChange={(url) =>
-                          field.onChange([
-                            ...field.value,
-                            { url },
-                          ])
+                          field.onChange([...field.value, { url }])
                         }
                         onRemove={(url) =>
                           field.onChange([
                             ...field.value.filter(
-                              (current) =>
-                                current.url !== url
+                              (current) => current.url !== url
                             ),
                           ])
                         }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="model"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>GLB file</FormLabel>
+                    <FormControl>
+                      <FileUpload
+                        value={field.value} // Directly pass the string value
+                        disabled={loading}
+                        onChange={(url) => field.onChange(url)} 
+                        onRemove={() => field.onChange("")} 
                       />
                     </FormControl>
                     <FormMessage />
@@ -302,10 +296,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       </FormControl>
                       <SelectContent>
                         {categories.map((category) => (
-                          <SelectItem
-                            key={category.id}
-                            value={category.id}
-                          >
+                          <SelectItem key={category.id} value={category.id}>
                             {category.name}
                           </SelectItem>
                         ))}
@@ -353,8 +344,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </div>
 
                     <FormDescription className="text-sm">
-                      This product will appear on the home
-                      page
+                      This product will appear on the home page
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -377,8 +367,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <FormLabel>Archived</FormLabel>
                     </div>
                     <FormDescription>
-                      This product will not appear anywhere
-                      in the store
+                      This product will not appear anywhere in the store
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -394,21 +383,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 render={({ field }) => (
                   <div>
                     {variants.map((variant, index) => (
-                      <div
-                        key={index}
-                        className="grid grid-cols-4 gap-8"
-                      >
+                      <div key={index} className="grid grid-cols-4 gap-8">
                         <FormItem>
                           <FormLabel>Color</FormLabel>
                           <Select
                             disabled={loading}
                             onValueChange={(value) => {
-                              const newVariants = [
-                                ...variants,
-                              ];
+                              const newVariants = [...variants];
                               if (newVariants[index]) {
-                                newVariants[index].colorId =
-                                  value;
+                                newVariants[index].colorId = value;
                                 field.onChange(newVariants);
                               }
                             }}
@@ -417,19 +400,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue
-                                  defaultValue={
-                                    variant.colorId || ""
-                                  }
+                                  defaultValue={variant.colorId || ""}
                                   placeholder="Select a color"
                                 />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {colors.map((color) => (
-                                <SelectItem
-                                  key={color.id}
-                                  value={color.name}
-                                >
+                                <SelectItem key={color.id} value={color.name}>
                                   {color.name}
                                 </SelectItem>
                               ))}
@@ -442,11 +420,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                           <Select
                             disabled={loading}
                             onValueChange={(value) => {
-                              const newVariants = [
-                                ...variants,
-                              ];
-                              newVariants[index].sizeId =
-                                value;
+                              const newVariants = [...variants];
+                              newVariants[index].sizeId = value;
                               field.onChange(newVariants);
                             }}
                             value={variant.sizeId || ""}
@@ -454,19 +429,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue
-                                  defaultValue={
-                                    variant.sizeId || ""
-                                  }
+                                  defaultValue={variant.sizeId || ""}
                                   placeholder="Select a size"
                                 />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                               {sizes.map((size) => (
-                                <SelectItem
-                                  key={size.id}
-                                  value={size.name}
-                                >
+                                <SelectItem key={size.id} value={size.name}>
                                   {size.name}
                                 </SelectItem>
                               ))}
@@ -484,18 +454,12 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                               placeholder="0"
                               value={variant.inStock}
                               onChange={(e) => {
-                                const newVariants = [
-                                  ...variants,
-                                ];
+                                const newVariants = [...variants];
                                 if (newVariants[index]) {
-                                  newVariants[
-                                    index
-                                  ].inStock = Number(
+                                  newVariants[index].inStock = Number(
                                     e.target.value
                                   );
-                                  field.onChange(
-                                    newVariants
-                                  );
+                                  field.onChange(newVariants);
                                 }
                               }}
                             />
@@ -529,15 +493,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                               size="icon"
                               onClick={() => {
                                 if (variants.length > 1) {
-                                  const newVariants =
-                                    variants.filter(
-                                      (_, variantIndex) =>
-                                        variantIndex !==
-                                        index
-                                    );
-                                  field.onChange(
-                                    newVariants
+                                  const newVariants = variants.filter(
+                                    (_, variantIndex) => variantIndex !== index
                                   );
+                                  field.onChange(newVariants);
                                 } else {
                                   toast.error(
                                     "At least one variant is required."
@@ -557,11 +516,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               />
             </div>
 
-            <Button
-              disabled={loading}
-              className="ml-auto"
-              type="submit"
-            >
+            <Button disabled={loading} className="ml-auto" type="submit">
               {action}
             </Button>
           </div>

@@ -144,7 +144,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           </Button>
 
           <Modal open={isModalOpen} onClose={closeModal}>
-            <ModelViewer modelPath={`/models/shirt_baked.glb`} />
+            <ModelViewer modelPath={data.model} />
           </Modal>
         </div>
 

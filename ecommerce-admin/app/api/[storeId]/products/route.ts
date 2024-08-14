@@ -23,6 +23,7 @@ export async function POST(
         sizeId: string;
         colorId: string;
       }[];
+      model: string;
     };
 
     const {
@@ -34,6 +35,7 @@ export async function POST(
       isFeatured,
       isArchived,
       description,
+      model,
     } = body;
 
     if (!userId) {
@@ -78,6 +80,9 @@ export async function POST(
         { status: 400 }
       );
     }
+    if (!model) {
+      return new NextResponse("Model is required", { status: 400 });
+    }
 
     if (!params.storeId) {
       return new NextResponse("Store id is required", {
@@ -107,6 +112,7 @@ export async function POST(
         categoryId,
         storeId: params.storeId,
         description,
+        model,
         variants: {
           createMany: {
             data: [

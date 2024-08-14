@@ -51,6 +51,7 @@ export async function PATCH(
       isFeatured: boolean;
       isArchived: boolean;
       description: string;
+      model: string;
       variants: {
         inStock: number;
         sizeId: string;
@@ -66,6 +67,7 @@ export async function PATCH(
       isFeatured,
       isArchived,
       description,
+      model,
       variants,
     } = body;
 
@@ -110,6 +112,11 @@ export async function PATCH(
         status: 400,
       });
     }
+    if (!model) {
+      return new NextResponse("ModleUrl is required", {
+        status: 400,
+      });
+    }
 
     if (!variants) {
       return new NextResponse(
@@ -140,6 +147,7 @@ export async function PATCH(
         price,
         categoryId,
         description,
+        model,
         variants: {
           deleteMany: {},
         },
