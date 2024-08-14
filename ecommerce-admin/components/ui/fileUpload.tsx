@@ -37,7 +37,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
             </div>
             <div className="flex flex-col items-center justify-center h-full">
               <File className="w-16 h-16" />
-              <span>GLB File</span>
+              <span>3D File</span>
             </div>
           </div>
         )}
@@ -56,7 +56,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                 variant="secondary"
                 onClick={onClick}
               >
-                Upload a GLB File
+                Upload a GLB/3DS or Obj File
               </Button>
             );
           }}
