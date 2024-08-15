@@ -12,19 +12,19 @@ interface ShirtProps {
 }
 
 const Shirt: React.FC<ShirtProps> = ({ model, color, logo }) => {
-  //const { nodes, materials } = useGLTF(model);
+  const { nodes, materials } = useGLTF(model) as any;
   const logoTexture = useTexture(logo || "");
 
   useFrame((state, delta) => {
     // Smoothly update the color of the material
-    easing.dampC(model.material.lambert1.color, color, 0.25, delta);
+    easing.dampC(materials.lambert1.color, color, 0.25, delta);
   });
 
   return (
     <mesh
       castShadow
-      geometry={model.geometry}
-      material={model.materials.lambert1}
+      geometry={nodes.model.geometry}
+      material={materials.lambert1}
       material-roughness={1}
       dispose={null}
     >
