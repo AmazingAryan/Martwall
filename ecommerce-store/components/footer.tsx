@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="flex flex-col items-center justify-center h-48 mt-10 bg-stone-950">
       <nav className="flex items-center justify-between w-full py-6 border-b-2 border-zinc-700 max-w-7xl">
         <Link href="/" className="flex pl-2 lg:ml-0 gap-x-2 md:pl-0">
-          <Image src={logo} alt="logo" height={36} width={100} />
+          <h6>Martwall</h6>
         </Link>
         <section className="flex pr-2 md:pr-0 gap-x-6">
           <Link href="/">
@@ -25,7 +25,7 @@ const Footer = () => {
       </nav>
       <section className="flex py-6">
         <p className="text-xs text-white">
-          &copy; 2023 Store4U, Repith Project. All rights reserved.
+          &copy; 2024 Martwall, a Hackathon project.
         </p>
       </section>
     </footer>
