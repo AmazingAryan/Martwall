@@ -24,9 +24,9 @@ This project serves as a comprehensive solution for online AR store, seamlessly 
 
 ## Demo
 
-Admin Dashboard: https://ecommerce-project-admin-five.vercel.app
+Admin Dashboard: yet to publish
 
-Store: https://ecommerce-project-store-phi.vercel.app
+Store: yet to publish
 
 
 ## Installation
