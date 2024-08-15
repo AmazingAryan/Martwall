@@ -16,9 +16,9 @@ This project serves as a comprehensive solution for online AR store, seamlessly 
 
 ## Tech Stack
 
-**Client:** React, Next.js, TailwindCSS, shadcn/ui
+**Client:** Next.js, TailwindCSS, shadcn/ui, ThreeJS, WebXR
 
-**Server:** Prisma (Planetscale)
+**Server:** Prisma (NeonDB)
 
 **Other:** Stripe, Clerk
 
