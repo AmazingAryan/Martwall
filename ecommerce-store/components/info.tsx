@@ -144,7 +144,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
           </Button>
 
           <Modal open={isModalOpen} onClose={closeModal}>
-            <ModelViewer modelPath={data.model} />
+            <ModelViewer modelPath={data.model} color={selectedColor} image={data.images[0]?.id || ""} />
           </Modal>
         </div>
 

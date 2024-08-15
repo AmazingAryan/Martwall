@@ -13,35 +13,31 @@ const CameraRig: React.FC<CameraRigProps> = ({ children }) => {
   useFrame((state, delta) => {
     const isBreakpoint = window.innerWidth <= 1260;
     const isMobile = window.innerWidth <= 600;
-  
+
     // Set the target position to center the model
-    let targetPosition: [number, number, number] = [5, 10, 10]; // Adjust Z value for depth
-  
+    let targetPosition: [number, number, number] = [0, 1, 5]; // Adjust Z value for depth
+
     // Adjust target position based on screen size
     if (isMobile) {
-      targetPosition = [1, 1, 1]; // Increase Z value slightly for mobile
+      targetPosition = [0, 0.5, 5]; // Increase Z value slightly for mobile
     } else if (isBreakpoint) {
-      targetPosition = [0, 0, 5.5]; // Slight adjustment for mid-size screens
+      targetPosition = [0, 1, 5]; // Slight adjustment for mid-size screens
     } else {
-      targetPosition = [-1, 20, -10]; // Default target position for desktop
+      targetPosition = [0, 1, 10]; // Default target position for desktop
     }
-  
+
     // Set model camera position
-    if (state.camera) {
-      easing.damp3(state.camera.position, targetPosition, 0.25, delta);
-    }
-  
-    // Set the model rotation smoothly
-    if (group.current) {
-      // Adjust rotation to fix upside-down issue
-  
-      easing.dampE(
-        group.current.rotation,
-        [state.pointer.y / 1, -state.pointer.x / 1, 1],
-        0.25,
-        delta
-      );
-    }
+    easing.damp3(state.camera.position, targetPosition, 0.25, delta);
+
+    // Simplified rotation logic
+    //if (group.current) {
+    //  easing.dampE(
+    //    group.current.rotation,
+    //    [state.pointer.y / 10, -state.pointer.x / 10, 0],
+    //    0.25,
+    //    delta
+    //  );
+    //}
   });
 
   return <group ref={group}>{children}</group>;

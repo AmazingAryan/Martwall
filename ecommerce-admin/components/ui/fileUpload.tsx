@@ -56,7 +56,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                 variant="secondary"
                 onClick={onClick}
               >
-                Upload a GLB/3DS or Obj File
+                Upload a GLB fle
               </Button>
             );
           }}
