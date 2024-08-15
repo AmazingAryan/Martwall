@@ -1,9 +1,9 @@
 
-# <img src="https://github.com/Repith/ecommerce-project/blob/main/ecommerce-store/public/logo-black.png" width=250px height=auto alt="Logo">
+# Martwall
 
 
 
-This project serves as a comprehensive solution for online store, seamlessly integrating real-time store management with an elegant and efficient e-commerce platform. It was created as a reference point to understand how to build an advanced online store.
+This project serves as a comprehensive solution for online AR store, seamlessly integrating real-time store management with an elegant and efficient e-commerce platform.
 
 
 ## Features
@@ -91,16 +91,8 @@ Now the both - server and store should be connected properly.
 
 *(!) If you are using Stripe webhook with local environment use local client for proper results.*
 
-## Screenshots
-
-![Admin dashboard](https://github.com/Repith/Repith/blob/main/public/E-commerce/admin-dashboard.png)
-![Product Variants in DarkMode](https://github.com/Repith/Repith/blob/main/public/E-commerce/variants-dark-mode.png)
-![Orders](https://github.com/Repith/Repith/blob/main/public/E-commerce/orders.png)
-![Store](https://github.com/Repith/Repith/blob/main/public/E-commerce/store.png)
-![Cart](https://github.com/Repith/Repith/blob/main/public/E-commerce/cart.png)
-![Summary checkout](https://github.com/Repith/Repith/blob/main/public/E-commerce/summary.png)
 
 
 ## Credits
 
-Special thanks to [CodeWithAntonio](https://github.com/AntonioErdeljac) for this project :star: 
+Special thanks to [CodeWithAntonio](https://github.com/AntonioErdeljac) for this project base template :star: 
